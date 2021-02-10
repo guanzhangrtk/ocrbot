@@ -1,0 +1,14 @@
+{
+  "name": "ocrbot",
+  "version": "0.1",
+  "description": "OCR Discord Bot",
+  "main": "ocrbot.js",
+  "author": "GuanZhang",
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "ocr-space-api"
+  },
+  "scripts": {
+    "start": "node ocrbot.js"
+  }
+}
