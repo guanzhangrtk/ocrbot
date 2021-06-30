@@ -5,8 +5,8 @@
   "main": "ocrbot.js",
   "author": "GuanZhang",
   "dependencies": {
-    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
-    "ocr-space-api"
+    "discord.js": ">=12.5.3",
+    "ocr-space-api": ">=1.0.1"
   },
   "scripts": {
     "start": "node ocrbot.js"
