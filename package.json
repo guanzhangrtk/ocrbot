@@ -6,6 +6,7 @@
   "author": "GuanZhang",
   "dependencies": {
     "discord.js": ">=12.5.3",
+    "dolmetscher": "^1.1.1",
     "googleapis": ">=74.2.0",
     "ocr-space-api": ">=1.0.1",
     "request": ">=2.88.2",

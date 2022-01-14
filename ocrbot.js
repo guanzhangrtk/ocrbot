@@ -8,6 +8,7 @@ const {google} = require('googleapis');
 // View and manage Google Drive files and folders created by the bot
 const SCOPES = ['https://www.googleapis.com/auth/drive.file'];
 const TOKEN_PATH = './gdrive.json';
+const {GoogleTranslator, MymemoryTranslator} = require('dolmetscher');
 
 let botname = "OCRbot";
 let presence = "OCR";
@@ -140,6 +141,21 @@ async function googleOCR(msg) {
   }
 }
 
+// Translate using dolmetscher
+async function translate(msg) {
+  let mymemory = new MymemoryTranslator("en", "ja");
+
+  console.log("Translating text to English: %s", msg.content)
+  try {
+    const res = await mymemory.translateText(msg.content);
+    sendDaMessage(msg.channel.id, res);
+  }
+
+  catch(err) {
+    console.log(err);
+  }
+}
+
 // Init OCRbot
 console.log("Initializing " + botname);
 // Enable partial structures for MESSAGE and REACTION to get reaction events on uncached messages
@@ -148,6 +164,8 @@ bot.login(auth.token);
 
 bot.once('ready', function (evt) {
   console.log(botname + " [" + bot.username + "] id: " + bot.id + " ready");
+  // List MyMemory supported languages and their codes 
+  console.log("MyMemory supported languages are: ", MymemoryTranslator.getSupportedLanguages());
 
   bot.user.setPresence({
     activity: { name: presence }
@@ -193,13 +211,22 @@ bot.on('messageReactionAdd', async (reaction, user) => {
     case '🇬':
       lang = "google";
     break;
+
+    // Translate using MyMemory to English
+    case '🇬🇧':
+      lang = "english";
+    break;
   }
 
   if (lang != "") {
-    // Message has no attachment, nothing to do
-    if (reaction.message.attachments.size <= 0) return;
-
-    if (reaction.message.attachments.every(isImage)) {
+    // If message has no attachment and we are not translating, then return
+    if (reaction.message.attachments.size <= 0) {
+      if (lang == "english") {
+        translate(reaction.message);
+      } else {
+        return;
+      }
+    } else if (reaction.message.attachments.every(isImage)) {
       if (lang == "google") {
         googleOCR(reaction.message);
       } else {
